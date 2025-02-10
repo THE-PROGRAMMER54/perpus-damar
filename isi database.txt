@@ -1,0 +1,14 @@
+nama database = perpus-damar
+
+table users dan buku
+
+1.isi table users
+id tipedata int
+username tipedata varchar
+password tipedata varchar
+
+2.isi table buku
+id_buku int
+nama_buku varchar
+jumlah_buku int
+sisa_buku int
