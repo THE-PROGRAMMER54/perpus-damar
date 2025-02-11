@@ -91,7 +91,7 @@ $data = mysqli_query($con, "SELECT * FROM peminjam");
                             <td><?php echo $row['jumlah_buku'] ?></td>
                             <td><?php echo $row['update_at'] ?></td>
                             <td>
-                                <a href="" class="btn-edit">edit</a>
+                                <a href="editpinjam.php?id_peminjam=<?php echo $row['id_peminjam'] ?>" class="btn-edit">edit</a>
                                 <a href="" class="btn-delete">delete</a>
                             </td>
                         </tr>

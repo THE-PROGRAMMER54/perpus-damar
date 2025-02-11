@@ -92,7 +92,7 @@ $data = mysqli_query($con, $query);
                             <td><?php echo $row['created_at'] ?></td>
                             <td><?php echo $row['update_at'] ?></td>
                             <td>
-                                <a href="" class="btn-edit">edit</a>
+                                <a href="editbuku.php?id_buku=<?php echo $row['id_buku'] ?>" class="btn-edit">edit</a>
                                 <a href="" class="btn-delete">delete</a>
                             </td>
                         </tr>
