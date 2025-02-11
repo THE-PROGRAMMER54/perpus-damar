@@ -110,7 +110,7 @@ if(isset($_POST['tambah'])){
     
     //arahkan ke dashboard jika berhasil mengedit buku
     if ($result) {
-        header("location: dashboard.php");
+        header("location: peminjaman.php");
     }else {
         $_SESSION['error'] = "Gagal Mengganti Data Silahkan Coba Lagi!!";
         header("location: editpinjam.php?=id".$id_buku);

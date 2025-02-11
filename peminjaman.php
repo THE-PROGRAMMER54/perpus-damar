@@ -2,8 +2,33 @@
 // ambil koneksi dari koneksi.php
 include "koneksi.php";
 
+// Ambil input pencarian
+$search = isset($_GET['search']) ? $_GET['search'] : '';
+
+// Query untuk mengambil data peminjam
+$query = "SELECT peminjam.*, buku.judul_buku 
+          FROM peminjam 
+          LEFT JOIN buku ON peminjam.id_buku = buku.id_buku";
+
+// Tambahkan kondisi pencarian jika ada
+if (!empty($search)) {
+    $query .= " WHERE peminjam.nama_peminjam LIKE '%$search%' OR buku.judul_buku LIKE '%$search%'";
+}
+
 // query mysql
-$data = mysqli_query($con, "SELECT * FROM peminjam");
+$data = mysqli_query($con, "$query");
+
+// Proses pengembalian buku
+if (isset($_GET['kembalikan'])) {
+    $id_peminjam = $_GET['kembalikan'];
+
+    // Update kolom update_at dengan CURRENT_TIMESTAMP
+    $update_query = "UPDATE peminjam SET update_at=CURRENT_TIMESTAMP WHERE id_peminjam='$id_peminjam'";
+    mysqli_query($con, $update_query);
+
+    // Redirect untuk menghindari pengulangan pengembalian
+    header("Location: peminjaman.php");
+}
 
 ?>
 
@@ -35,12 +60,18 @@ $data = mysqli_query($con, "SELECT * FROM peminjam");
             <h2>Data Peminjaman</h2>
         </header>
         <div class="fitur">
+            <!-- btn tambah -->
             <a href="tambahpeminjam.php">
                 <button class="btn-tambah">Pinjam</button>
             </a>
+            <!-- btn search -->
             <div class="div-search">
-                <input type="text" name="search" class="search" placeholder="search">
-                <img src="./search.svg" alt="">
+                <form action="" method="GET">
+                    <input type="text" name="search" class="search" placeholder="search" value="<?php echo htmlspecialchars($search); ?>">
+                    <button type="submit">
+                        <img src="./search.svg" alt="">
+                    </button>
+                </form>
             </div>
         </div>
         <div class="table-container">
@@ -52,6 +83,7 @@ $data = mysqli_query($con, "SELECT * FROM peminjam");
                         <th>Nama Buku</th>
                         <th>Jumlah Buku</th>
                         <th>Tanggal Pinjam</th>
+                        <th>Tanggal Dikembalikan</th>
                         <th>Kelola</th>
                     </tr>
                 </thead>
@@ -89,11 +121,17 @@ $data = mysqli_query($con, "SELECT * FROM peminjam");
                                 ?>
                             </td>
                             <td><?php echo $row['jumlah_buku'] ?></td>
+                            <td><?php echo $row['created_at'] ?></td>
                             <td><?php echo $row['update_at'] ?></td>
                             <td>
-                                <a href="editpinjam.php?id_peminjam=<?php echo $row['id_peminjam'] ?>" class="btn-edit">edit</a>
-                                <a href="" class="btn-delete">delete</a>
-                            </td>
+                            <!-- fitur Kembalikan -->
+                            <?php if(is_null($row['update_at'])) { ?>
+                                <a href="editbuku.php?id_buku=<?php echo $row['id_buku'] ?>" class="btn-edit">edit</a>
+                                <a href="?kembalikan=<?php echo $row['id_peminjam'] ?>" onclick="return confirm('Apakah Anda yakin ingin mengembalikan buku ini?')" class="btn-kembali">Kembalikan</a>
+                            <?php } else { ?>
+                                <a href="deletebuku.php?id_buku=<?php echo $row['id_buku'] ?>" onclick="return confirm('Apakah Anda yakin ingin menghapus buku ini?')" class="btn-delete">delete</a>
+                            <?php } ?>
+                        </td>
                         </tr>
                         <?php 
                             }}

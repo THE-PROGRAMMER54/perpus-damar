@@ -160,3 +160,11 @@ button i {
     text-decoration: none !important;
     color: black !important;
 }
+
+/* desain untuk button kembali */
+.btn-kembali {
+    background-color: rgb(0, 255, 21) !important;
+    padding: 4px !important;
+    text-decoration: none !important;
+    color: black !important;
+}

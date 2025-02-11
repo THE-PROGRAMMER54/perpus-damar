@@ -2,12 +2,16 @@
 // ambil koneksi dari koneksi.php
 include "koneksi.php";
 
+// Inisialisasi variabel pencarian
+$search = isset($_GET['search']) ? $_GET['search'] : '';
+
 // query mysql untuk mengambil data buku dan pengurangan jumlah_buku yang ada di table buku dan dikurangi dari jumlah_buku yang ada ditable peminjam
 $query = "SELECT buku.id_buku, buku.judul_buku,buku.pengarang,buku.jumlah_buku,buku.created_at,buku.update_at, /*ambil semua isi table buku */
                 (buku.jumlah_buku - COALESCE(SUM(peminjam.jumlah_buku), 0)) AS sisa_buku FROM buku /* kurangi jumlah buku ditable buku dengan jumlah uku di table peminjam dan diberikan alias sisa_buku */
                 LEFT JOIN peminjam ON buku.id_buku = peminjam.id_buku /* menggabungkan table pinjam dengan id buku yang ada di table buku */
+                WHERE (buku.judul_buku LIKE '%$search%' OR buku.pengarang LIKE '%$search%') /*untuk pencarian*/ 
                 GROUP BY buku.id_buku, buku.judul_buku, buku.jumlah_buku;"; //untuk mengelompkan data buk
-                
+
 // eksekusi query mysql
 $data = mysqli_query($con, $query);
 ?>
@@ -39,15 +43,42 @@ $data = mysqli_query($con, $query);
         <header>
             <h2>Data Buku</h2>
         </header>
+
         <div class="fitur">
+            <!-- btn tambah -->
             <a href="tambahbuku.php">
                 <button class="btn-tambah">Tambah</button>
             </a>
+            <!-- btn search -->
             <div class="div-search">
-                <input type="text" name="search" class="search" placeholder="search">
-                <img src="./search.svg" alt="">
+                <form action="" method="GET">
+                    <input type="text" name="search" class="search" placeholder="search" value="<?php echo htmlspecialchars($search); ?>">
+                    <button type="submit">
+                        <img src="./search.svg" alt="">
+                    </button>
+                </form>
             </div>
         </div>
+
+        <!-- menampilkan pesan berhasil atau gagal saat hapus data -->
+        <?php if (isset($_SESSION['success'])) { ?>
+            <div class="pesan-sukses">
+                <?php
+                    echo $_SESSION['success'];
+                    unset($_SESSION['success']);
+                ?>
+            </div>
+        <?php } ?>
+
+        <?php if (isset($_SESSION['error'])) { ?>
+            <div class="pesan-error">
+                <?php
+                    echo $_SESSION['error'];
+                    unset($_SESSION['error']);
+                ?>
+            </div>
+        <?php } ?>
+
         <div class="table-container">
             <table>
                 <thead>
@@ -93,7 +124,7 @@ $data = mysqli_query($con, $query);
                             <td><?php echo $row['update_at'] ?></td>
                             <td>
                                 <a href="editbuku.php?id_buku=<?php echo $row['id_buku'] ?>" class="btn-edit">edit</a>
-                                <a href="" class="btn-delete">delete</a>
+                                <a href="deletebuku.php?id_buku=<?php echo $row['id_buku'] ?>" onclick="return confirm('Apakah Anda yakin ingin menghapus buku ini?');" class="btn-delete">delete</a>
                             </td>
                         </tr>
                         <?php 

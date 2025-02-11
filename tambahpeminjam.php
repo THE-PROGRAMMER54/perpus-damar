@@ -98,7 +98,7 @@ if(isset($_POST['tambah'])){
     
     //arahkan ke dashboard jika berhasil menambah buku
     if ($result) {
-        header("location: dashboard.php");
+        header("location: peminjaman.php");
     }else {
         $_SESSION['error'] = "Gagal Menambahkan Data Silahkan Coba Lagi!!";
         header("location: tambahpeminjam.php");
