@@ -1,0 +1,73 @@
+*,body{
+    margin: 0;
+    padding: 0;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+/* buat container ke tengah dan fleksible*/
+.container{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* tambahin desain card */
+.form{
+    width: 450px;
+    margin-top: 150px;
+    padding: 10px;
+    padding-bottom: 30px;
+    border: 4px solid black;
+    border-radius: 10px;
+}
+
+/* buat tulisan judul ke tengah */
+.teks-login{
+    text-align: center;
+}
+
+.teks-login p{
+    margin-top: 10px;
+}
+
+/* buat form input */
+.form-input{
+    margin-top: 30px;
+    margin-left: 25px;
+}
+
+/* ngatur lebar input */
+.input{
+    width: 400px;
+    height: 30px;
+    margin-bottom: 20px;
+    font-size: 18px;
+}
+
+/* ngatur ukuran teks input */
+.teks-input{
+    font-size: 16px;
+    font-weight: bold;
+}
+
+/* ngatur tombol login */
+
+.tambah{
+    width: 400px;
+    height: 40px;
+    background-color: #000000;
+    color: white;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+}
+
+.pesan-error{
+    color: red;
+    font-size: 14px;
+    background: #ffe6e6;
+    padding: 8px;
+    border-radius: 5px;
+    text-align: center;
+    margin-top: 10px;
+}

@@ -15,8 +15,8 @@
         </div>`
         <nav>
             <ul>
-                <li><a href="dashboard.html">Data Buku</a></li>
-                <li><a href="peminjaman.html">Data Peminjaman</a></li>
+                <li><a href="dashboard.php">Data Buku</a></li>
+                <li><a href="peminjaman.php">Data Peminjaman</a></li>
             </ul>
         </nav>
     </div>
@@ -26,7 +26,7 @@
             <h2>Data Buku</h2>
         </header>
         <div class="fitur">
-            <a href="">
+            <a href="tambahbuku.php">
                 <button class="btn-tambah">Tambah</button>
             </a>
             <div class="div-search">
