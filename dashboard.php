@@ -1,3 +1,17 @@
+<?php
+// ambil koneksi dari koneksi.php
+include "koneksi.php";
+
+// query mysql untuk mengambil data buku dan pengurangan jumlah_buku yang ada di table buku dan dikurangi dari jumlah_buku yang ada ditable peminjam
+$query = "SELECT buku.id_buku, buku.judul_buku,buku.pengarang,buku.jumlah_buku,buku.created_at,buku.update_at, /*ambil semua isi table buku */
+                (buku.jumlah_buku - COALESCE(SUM(peminjam.jumlah_buku), 0)) AS sisa_buku FROM buku /* kurangi jumlah buku ditable buku dengan jumlah uku di table peminjam dan diberikan alias sisa_buku */
+                LEFT JOIN peminjam ON buku.id_buku = peminjam.id_buku /* menggabungkan table pinjam dengan id buku yang ada di table buku */
+                GROUP BY buku.id_buku, buku.judul_buku, buku.jumlah_buku;"; //untuk mengelompkan data buk
+                
+// eksekusi query mysql
+$data = mysqli_query($con, $query);
+?>
+
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -10,9 +24,9 @@
 
     <div class="sidebar">
         <div class="profile">
-            <p>Rafi</p>
+            <p>Admin</p>
             <span class="role">Administrator</span>
-        </div>`
+        </div>
         <nav>
             <ul>
                 <li><a href="dashboard.php">Data Buku</a></li>
@@ -40,62 +54,51 @@
                     <tr>
                         <th>No</th>
                         <th>Nama Buku</th>
+                        <th>Pengarang</th>
                         <th>Jumlah Buku</th>
                         <th>Sisa Buku</th>
+                        <th>Tanggal Dibuat</th>
+                        <th>Tanggal Diupdate</th>
                         <th>Kelola</th>
                     </tr>
                 </thead>
+
                 <tbody>
-                    <tr>
-                        <td>1</td>
-                        <td>Matematika</td>
-                        <td>50</td>
-                        <td>13</td>
-                        <td>
-                            <button class="edit">edit</button>
-                            <button class="delete">delete</button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>2</td>
-                        <td>RPL 2</td>
-                        <td>50</td>
-                        <td>13</td>
-                        <td>
-                            <button class="edit">edit</button>
-                            <button class="delete">delete</button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>3</td>
-                        <td>C++</td>
-                        <td>50</td>
-                        <td>14</td>
-                        <td>
-                            <button class="edit">edit</button>
-                            <button class="delete">delete</button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>4</td>
-                        <td>CI 4</td>
-                        <td>50</td>
-                        <td>14</td>
-                        <td>
-                            <button class="edit">edit</button>
-                            <button class="delete">delete</button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>5</td>
-                        <td>Data Mining</td>
-                        <td>50</td>
-                        <td>14</td>
-                        <td>
-                            <button class="edit">edit</button>
-                            <button class="delete">delete</button>
-                        </td>
-                    </tr>
+                <!-- ambil data buku dari table buku -->
+                 <?php
+                    $n = 1;
+                    // ambil semua data dari table buku
+                    $getdata = mysqli_fetch_all($data,MYSQLI_ASSOC);
+                    // jika data kosong, munculkan pesan data kosong
+                    if(empty($getdata)){?>
+                        <tr>
+                            <td colspan="5">
+                                <h1 style="text-align: center;">Data Belum Ada</h1>
+                            </td>
+                        </tr>
+                        <?php } else { 
+                            // jika data ada, tampilkan data
+                            foreach($getdata as $row){
+                        ?>
+                        <tr>
+                            <td><?php echo $n++ ?></td>
+                            <td><?php echo $row['judul_buku'] ?></td>
+                            <td><?php echo $row['pengarang'] ?></td>
+                            <td><?php echo $row['jumlah_buku'] ?></td>
+                            <td>
+                                <?php echo $row['sisa_buku'] 
+                                ?>
+                            </td>
+                            <td><?php echo $row['created_at'] ?></td>
+                            <td><?php echo $row['update_at'] ?></td>
+                            <td>
+                                <a href="" class="btn-edit">edit</a>
+                                <a href="" class="btn-delete">delete</a>
+                            </td>
+                        </tr>
+                        <?php 
+                            }}
+                        ?>
                 </tbody>
             </table>
         </div>

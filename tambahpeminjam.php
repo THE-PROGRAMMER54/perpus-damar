@@ -42,7 +42,7 @@ include "koneksi.php";
              <div class="form-input">
             <label for="nama_peminjam" class="teks-input">Nama Peminjam</label>
             <br>
-            <input type="text" id="nama_peminjam" name="nama_peminjam" class="input" required>
+            <input type="text" id="nama_peminjam" name="nama_peminjam" class="input" autocomplete="off" required>
             <br>
             <label for="id_buku" class="teks-input">Judul Buku</label>
             <br>
@@ -75,6 +75,20 @@ if(isset($_POST['tambah'])){
     $nama_peminjam = $_POST["nama_peminjam"];
     $id_buku = $_POST["id_buku"];
     $jumlah_buku = $_POST["jumlah_buku"];
+
+    
+    // Cek jumlah buku yang tersedia
+    $query_cek = "SELECT jumlah_buku FROM buku WHERE id_buku = '$id_buku'";
+    $result_cek = mysqli_query($con, $query_cek);
+    $data_buku = mysqli_fetch_assoc($result_cek);
+    
+    $sisa_buku = $data_buku['jumlah_buku'];
+
+    // Validasi: Pastikan jumlah pinjam tidak melebihi sisa buku
+    if ($jumlah_buku > $sisa_buku) {
+        $_SESSION['error'] = "maaf buku yang tersedia hanya $sisa_buku.";
+        header("location: tambahpeminjam.php");
+    }else{
     // query mysql
     $query_sql = "INSERT INTO peminjam(nama_peminjam,id_buku,jumlah_buku) 
                    VALUES ('$nama_peminjam', '$id_buku', '$jumlah_buku')";
@@ -89,5 +103,6 @@ if(isset($_POST['tambah'])){
         $_SESSION['error'] = "Gagal Menambahkan Data Silahkan Coba Lagi!!";
         header("location: tambahpeminjam.php");
     }
+}
 }
 ?>

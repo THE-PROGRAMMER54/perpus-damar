@@ -42,15 +42,15 @@ include "koneksi.php";
              <div class="form-input">
             <label for="judul_buku" class="teks-input">Judul Buku</label>
             <br>
-            <input type="text" id="judul_buku" name="judul_buku" class="input" required>
+            <input type="text" id="judul_buku" name="judul_buku" class="input" autocomplete="off" required>
             <br>
             <label for="pengarang" class="teks-input">Pengarang Buku</label>
             <br>
-            <input type="text" id="pengarang" name="pengarang" class="input" required>
+            <input type="text" id="pengarang" name="pengarang" class="input" autocomplete="off" required>
             <br>
             <label for="jumlah_buku" class="teks-input">Jumlah Buku</label>
             <br>
-            <input type="jumlah_buku" id="jumlah_buku" name="jumlah_buku" class="input" required>
+            <input type="number" id="jumlah_buku" name="jumlah_buku" class="input" required>
             <br>
             <input class="tambah" type="submit" name="tambah" value="tambah">
              </div>

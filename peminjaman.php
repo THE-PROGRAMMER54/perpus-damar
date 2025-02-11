@@ -1,3 +1,12 @@
+<?php 
+// ambil koneksi dari koneksi.php
+include "koneksi.php";
+
+// query mysql
+$data = mysqli_query($con, "SELECT * FROM peminjam");
+
+?>
+
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -10,9 +19,9 @@
 
     <div class="sidebar">
         <div class="profile">
-            <p>Rafi</p>
+            <p>Admin</p>
             <span class="role">Administrator</span>
-        </div>`
+        </div>
         <nav>
             <ul>
                 <li><a href="dashboard.php">Data Buku</a></li>
@@ -39,63 +48,56 @@
                 <thead>
                     <tr>
                         <th>No</th>
-                        <th>Nama Peminjaman</th>
+                        <th>Nama Peminjam</th>
                         <th>Nama Buku</th>
                         <th>Jumlah Buku</th>
+                        <th>Tanggal Pinjam</th>
                         <th>Kelola</th>
                     </tr>
                 </thead>
-                <tbody>
-                    <tr>
-                        <td>1</td>
-                        <td>reihan</td>
-                        <td>Matematika</td>
-                        <td>13</td>
-                        <td>
-                            <button class="edit">edit</button>
-                            <button class="delete">delete</button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>2</td>
-                        <td>jawa</td>
-                        <td>RPL 2</td>
-                        <td>13</td>
-                        <td>
-                            <button class="edit">edit</button>
-                            <button class="delete">delete</button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>3</td>
-                        <td>rapi</td>
-                        <td>C++</td>
-                        <td>14</td>
-                        <td>
-                            <button class="edit">edit</button>
-                            <button class="delete">delete</button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>4</td>
-                        <td>kurui</td>
-                        <td>CI 4</td>
-                        <td>14</td>
-                        <td>
-                            <button class="edit">edit</button>
-                            <button class="delete">delete</button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>5</td>
-                        <td>rafael</td>
-                        <td>Data Mining</td>
-                        <td>14</td>
-                        <td>
-                            <button class="edit">edit</button>
-                            <button class="delete">delete</button>
-                        </td>
-                    </tr>
+                <tbody><?php
+                    $n = 1;
+                    // ambil semua data dari table buku
+                    $getdata = mysqli_fetch_all($data,MYSQLI_ASSOC);
+                    // jika data kosong, munculkan pesan data kosong
+                    if(empty($getdata)){?>
+                        <tr>
+                            <td colspan="6">
+                                <h1 style="text-align: center;">Data Belum Ada</h1>
+                            </td>
+                        </tr>
+                        <?php } else { 
+                            // jika data ada, tampilkan data
+                            foreach($getdata as $row){
+                        ?>
+                        <tr>
+                            <td><?php echo $n++ ?></td>
+                            <td><?php echo $row['nama_peminjam'] ?></td>
+                            <td>
+                                <?php 
+                                    $querygetnamabuku ="SELECT peminjam.id_peminjam, buku.judul_buku 
+                                    FROM peminjam 
+                                    JOIN buku ON peminjam.id_buku = buku.id_buku";
+                                    
+                                    $resultgetnamabuku = mysqli_query($con, $querygetnamabuku);
+                                    
+                                    while($rowgetnamabuku = mysqli_fetch_assoc($resultgetnamabuku)){
+                                        if($row['id_peminjam'] == $rowgetnamabuku['id_peminjam']){
+                                            echo $rowgetnamabuku['judul_buku'];
+                                        }
+                                    }
+                                ?>
+                            </td>
+                            <td><?php echo $row['jumlah_buku'] ?></td>
+                            <td><?php echo $row['update_at'] ?></td>
+                            <td>
+                                <a href="" class="btn-edit">edit</a>
+                                <a href="" class="btn-delete">delete</a>
+                            </td>
+                        </tr>
+                        <?php 
+                            }}
+                        ?>
                 </tbody>
             </table>
         </div>

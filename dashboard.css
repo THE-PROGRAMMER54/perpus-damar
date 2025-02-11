@@ -112,16 +112,6 @@ button {
     border-radius: 5px;
 }
 
-button.edit {
-    background-color: #28a745;
-    color: white;
-}
-
-button.delete {
-    background-color: #dc3545;
-    color: white;
-}
-
 button i {
     font-size: 16px;
 }
@@ -153,4 +143,20 @@ button i {
     top: 4px;
     right:4px;
     width: 25px;
+}
+
+/* desain untuk button edit dan delete */
+
+.btn-edit{
+    background-color: gold !important;
+    color: black !important;
+    padding: 4px !important;
+    text-decoration: none !important;
+}
+
+.btn-delete{
+    background-color: red !important;
+    padding: 4px !important;
+    text-decoration: none !important;
+    color: black !important;
 }
